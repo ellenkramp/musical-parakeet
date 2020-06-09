@@ -27,6 +27,18 @@ exports.getCart = (req, res, next) => {
   });
 };
 
+exports.getProductDetail = (req, res, next) => {
+  const productId = req.params.productId;
+  Product.findById(productId, (product) => {
+    console.log(product);
+  });
+  res.redirect("/");
+  // res.render("shop/product-detail", {
+  //   path: `/products/${productId}`,
+  //   pageTitle: "Product Details",
+  // });
+};
+
 exports.getOrders = (req, res, next) => {
   res.render("shop/orders", {
     path: "/orders",
