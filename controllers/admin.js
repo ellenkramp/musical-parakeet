@@ -32,6 +32,8 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.deleteProduct = (req, res, next) => {
   const { productId } = req.body;
+  Product.delete(productId);
+  res.redirect("/admin/products");
 };
 
 exports.getEditProduct = (req, res, next) => {

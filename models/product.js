@@ -4,6 +4,8 @@ const filePath = require("../util/path");
 
 const p = path.join(filePath, "data", "products.json");
 
+const Cart = require("./cart");
+
 const getProductsFromFile = (cb) => {
   fs.readFile(p, (err, fileContent) => {
     if (err) {
@@ -34,7 +36,7 @@ module.exports = class Product {
           console.log(err);
         });
       } else {
-        this.id = Math.random().toString();
+        this.id = round(Math.random() * 100).toString();
         products.push(this);
         fs.writeFile(p, JSON.stringify(products), (err) => {
           console.log(err);
@@ -45,8 +47,21 @@ module.exports = class Product {
 
   static delete(id) {
     getProductsFromFile((products) => {
-      const updatedProducts = products.filter((prod) => prod.id !== id);
+      const product = products.find((prod) => {
+        return prod.id.trim() === id.trim();
+      });
+      if (!product) {
+        console.log("no product found");
+        return;
+      }
+      const updatedProducts = products.filter(
+        (prod) => prod.id.trim() !== id.trim()
+      );
+
       fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
+        if (!err) {
+          Cart.delete(id, product.price);
+        }
         console.log(err);
       });
     });
