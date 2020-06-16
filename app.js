@@ -6,6 +6,8 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const notFoundController = require("./controllers/not-found");
 
+const sequelize = require("./util/database");
+
 const app = express();
 
 app.set("view engine", "ejs");
@@ -18,5 +20,10 @@ app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
 app.use(notFoundController.getNotFound);
+
+sequelize
+  .sync()
+  .then((result) => {})
+  .catch((err) => console.log(err));
 
 app.listen(3000);
