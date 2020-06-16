@@ -64,13 +64,15 @@ exports.postCartDeleteProduct = (req, res, next) => {
 
 exports.getProductDetail = (req, res, next) => {
   const productId = req.params.productId;
-  Product.findById(productId, (product) => {
-    res.render("shop/product-detail", {
-      product,
-      path: `/products/${productId}`,
-      pageTitle: product.title,
-    });
-  });
+  Product.findById(productId)
+    .then(([product]) => {
+      res.render("shop/product-detail", {
+        product: product[0],
+        path: `/products/`,
+        pageTitle: product.title,
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getOrders = (req, res, next) => {
